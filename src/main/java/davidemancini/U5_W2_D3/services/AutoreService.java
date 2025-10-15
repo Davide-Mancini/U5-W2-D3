@@ -6,6 +6,10 @@ import davidemancini.U5_W2_D3.exceptions.NotFoundExceptions;
 import davidemancini.U5_W2_D3.payloads.AutoriPayload;
 import davidemancini.U5_W2_D3.repositories.AutoriRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,9 +22,10 @@ public class AutoreService {
     AutoriRepository autoriRepository;
 
 
-    public List<Autori> findAll (){
-
-        return autoriRepository.findAll();
+    public Page<Autori> findAll (int pageNumber, int pageSize, String pageSortBy){
+        if (pageSize>50) pageSize=50;
+        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by(pageSortBy));
+        return autoriRepository.findAll(pageable);
     }
 
     public Autori saveAutore(AutoriPayload body){

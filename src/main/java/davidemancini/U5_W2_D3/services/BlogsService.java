@@ -8,6 +8,10 @@ import davidemancini.U5_W2_D3.payloads.BlogsPayload;
 import davidemancini.U5_W2_D3.repositories.AutoriRepository;
 import davidemancini.U5_W2_D3.repositories.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,8 +24,10 @@ public class BlogsService {
     private BlogRepository blogRepository;
     @Autowired
     private AutoriRepository autoriRepository;
-    public List<Blog> findAll (){
-        return blogRepository.findAll();
+    public Page<Blog> findAll (int pageNumbe, int pageSize, String pageSortBy){
+        if (pageSize>50) pageSize=50;
+        Pageable pageable = PageRequest.of(pageNumbe,pageSize, Sort.by(pageSortBy));
+        return blogRepository.findAll(pageable);
     }
     public Blog saveBlog (BlogsPayload body){
         Autori autoreTrovato = autoriRepository.findById(body.getAuthor_id()).orElseThrow(()-> new NotFoundExceptions(body.getAuthor_id()));

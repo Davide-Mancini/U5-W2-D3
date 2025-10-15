@@ -5,6 +5,7 @@ import davidemancini.U5_W2_D3.entities.Autori;
 import davidemancini.U5_W2_D3.payloads.AutoriPayload;
 import davidemancini.U5_W2_D3.services.AutoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,10 @@ public class AutoriController {
     private AutoreService autoreService;
 
     @GetMapping
-    public List<Autori> getAutori(){
-        return autoreService.findAll();
+    public Page<Autori> getAutori(@RequestParam (defaultValue = "0") int page,
+                                  @RequestParam (defaultValue = "10") int size,
+                                  @RequestParam (defaultValue = "nome") String sortBy){
+        return autoreService.findAll(page,size,sortBy);
     }
     @GetMapping("/{authorId}")
     public Autori authorById(@PathVariable UUID authorId){

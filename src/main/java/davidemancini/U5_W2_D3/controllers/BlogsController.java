@@ -7,6 +7,7 @@ import davidemancini.U5_W2_D3.entities.Blog;
 import davidemancini.U5_W2_D3.payloads.BlogsPayload;
 import davidemancini.U5_W2_D3.services.BlogsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,10 @@ public class BlogsController {
 
 //RITORNA LA LISTA DI TUTTI I BLOG
     @GetMapping
-    public List<Blog> getBlogs (){
-        return blogsService.findAll();
+    public Page<Blog> getBlogs (@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "titolo") String sortBy){
+        return blogsService.findAll(page,size,sortBy);
     }
 
 //SALVO UN NUOVO BLOG
